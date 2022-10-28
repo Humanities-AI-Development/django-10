@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}detail{% endblock title %}
+{% block body %}
+<div class="card my-3 mx-auto" style="width:90%">
+    <div class="card-body">
+      <h2 class="card-title">{{object.title}}</h2>
+      <h5 class="card-text">{{object.text}}</5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">degree:{{object.degree}}</li>
+      <li class="list-group-item">user:{{object.user}}</li>
+      <li class="list-group-item">time:時間</li>
+    </ul> 
+    
+    <div class="card-body row">
+      {% if request.user == object.user%}
+        <a href="{% url 'app:app-update' object.pk %}" class="btn btn-outline-primary float-right col-3 mx-auto">更新</a>
+        <a href="{% url 'app:app-delete' object.pk %}" class="btn btn-outline-danger float-right col-3 mx-auto">削除</a>
+        <a href="{% url 'app:comment-create' object.pk %}" class="btn btn btn-outline-warning float-right col-3 mx-auto">コメント</a>
+        <a href="{% url 'app:app-list' %}" class="btn btn-outline-info float-right col-3 mx-auto">一覧</a>
+    
+      {%else%}
+        <a href="{% url 'app:comment-create' object.pk %}" class="btn btn btn-outline-warning float-right mx-auto col-5">comment</a>
+        <a href="{% url 'app:app-list' %}" class="btn btn-outline-info float-right col-5 mx-auto">←list</a>       
+      {%endif%}
+
+    </div>
+</div>
+
+
+<div class="row mx-auto " style="width:90%; margin-bottom:10rem"> 
+{% for i in object.comment_set.all %}
+<!-- <a href="#" class="list-group-item list-group-item-action mx-auto my-4" style="display:block;width:80%"> -->
+<div class="row mx-auto" style="width:90%;">
+  <a href="#" class="list-group-item list-group-item-action my-2" style="display:block;">
+  <div class="d-flex w-100 justify-content-between">
+    <h5 class="mb-1">{{i.username}}&emsp;</h5>
+    <small class="text-muted">{{ i.created_at|date:"Y-m-j H:i:s"}}</small>
+  </div>
+  <p class="mb-1 text-muted">{{i.text}}</p>
+  <small class="text-muted">返信</small>
+</a>
+</div>
+{% endfor %}
+</div>
+
+{% endblock body %}
+
